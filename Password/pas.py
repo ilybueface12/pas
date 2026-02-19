@@ -2,16 +2,13 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
+
 def is_very_long(password):
     return 2 * (len(password) > 12)
 
 
 def has_digit(password):
     return 2 * any(char.isdigit() for char in password)
-
-
-def has_letters(password):
-    return 0 * any(char.isalpha() for char in password)
 
 
 def has_upper_letters(password):
@@ -23,24 +20,32 @@ def has_lower_letters(password):
 
 
 def has_symbols(password):
-    special = "&, %, $, @, #, !, *"
-    return 2 * any(ch in special for ch in password)
+    return 2 * any(
+        (not ch.isalnum()) and (not ch.isspace())
+        for ch in password
+    )
 
 
-password = input("Введите пароль: ")
+def main():
+    password = input("Введите пароль: ")
 
-checks = [
-    is_very_long,
-    has_digit,
-    has_letters,
-    has_upper_letters,
-    has_lower_letters,
-    has_symbols,
-]
+    checks = [
+        is_very_long,
+        has_digit,
+        has_upper_letters,
+        has_lower_letters,
+        has_symbols,
+    ]
 
-score = 0
+    score = 0
 
-for check in checks:
-    score += check(password)
+    for check in checks:
+        score += check(password)
 
-logging.info(f"Рейтинг пароля: {score}")
+    logging.info(f"Рейтинг пароля: {score}")
+
+
+if __name__ == "__main__":
+    main()
+
+
